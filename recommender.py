@@ -31,16 +31,6 @@ def get_recommendations(searchReqList):
             except:
                 user_rate = -1
             rating_matrix_item[item_id-1, type-1] = user_rate
-    #print(rating_matrix_item)
-    # item × userの評価したかどうか{0, 1}がわかる行列作成
-    #rating_matrix_calc = rating_matrix_item.copy()
-    #rating_matrix_calc[pd.notna(rating_matrix_calc)] = 1
-    #rating_matrix_calc[pd.isna(rating_matrix_calc)] = 0
-    #print(rating_matrix_calc)
-
-    # 評価していないアイテムに1が立つ行列を作成。後で使う
-    #rating_matrix_train = np.abs(rating_matrix_calc - 1)
-    #print(rating_matrix_train)
 
     # NaNを0に変換
     rating_matrix_item[pd.isna(rating_matrix_item)] = 0
@@ -49,20 +39,12 @@ def get_recommendations(searchReqList):
     similarity_matrix = 1 - skmt.pairwise_distances(rating_matrix_item, metric='cosine')
     # 対角成分の値はゼロにする
     np.fill_diagonal(similarity_matrix, 0)
-    #print(similarity_matrix)
 
     # 各ユーザの評価値を抜き出し「類似度×評価点」を算出
     rating_matrix_user = rating_matrix_item[:, recipient_type - 1]
-    #print(rating_matrix_user)
     pred_rating_user = similarity_matrix * rating_matrix_user
-    #print(pred_rating_user)
     # アイテム（行）ごとに「類似度×評価点」を合計
     pred_rating_user = pred_rating_user.sum(axis=1)
-    #print(pred_rating_user)
-
-    # ユーザが既に評価したアイテムのスコアはゼロに直す
-    #pred_rating_user_item = pred_rating_user * rating_matrix_train[:,recipient_type - 1]
-    #print(pred_rating_user_item)
 
     #ここからレコメンドされたアイテムがどれだけあっていたかを評価していく
     recommend_list = np.argsort(pred_rating_user)[::-1][:3] + 1
