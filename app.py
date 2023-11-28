@@ -1,6 +1,5 @@
 import streamlit as st
 from recommender import get_recommendations
-from PIL import Image
 
 # タイトルと説明文を設定
 st.write('忙しい人のためのギフト提案型AI')
@@ -29,21 +28,16 @@ searchReqList.append(scene)
 
 st.text('')
 
-# 検索ボタン押下時
+# 検索ボタン押下時の処理
 if st.button("検索"):
     # おすすめ商品を検索
     recommended_items = get_recommendations(searchReqList)
 
-    # 結果を表示
-    st.markdown("<hr>", unsafe_allow_html=True)
+    # 取得した結果から上位3商品を表示
     for index, item in enumerate(recommended_items):
         link = f'[{index+1}.{item[0]}]({item[2]})'
         st.markdown(link, unsafe_allow_html=True)
         st.write(f'{item[1]}円')
-        image = Image.open(f'./img/{item[3]}')
-        st.image(image,width=200)
-        st.text('')
-        st.text('')
 
 
 

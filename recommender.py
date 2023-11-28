@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import sklearn.metrics as skmt
-import math
+# import math
 from tqdm import tqdm
 
 def get_recommendations(searchReqList):
@@ -48,16 +48,16 @@ def get_recommendations(searchReqList):
 
     #ここからレコメンドされたアイテムがどれだけあっていたかを評価していく
     recommend_list = np.argsort(pred_rating_user)[::-1][:3] + 1
-    print(recommend_list)
+    # print(recommend_list)
 
     # 商品情報を取得する
     item_data = pd.read_csv('./data/item.csv')
     index_1 = recommend_list[0] - 1
     index_2 = recommend_list[1] - 1
     index_3 = recommend_list[2] - 1
-    item_1 = [item_data.iloc[index_1,1], item_data.iloc[index_1,3], item_data.iloc[index_1,4], item_data.iloc[index_1,5]]
-    item_2 = [item_data.iloc[index_2,1], item_data.iloc[index_2,3], item_data.iloc[index_2,4], item_data.iloc[index_2,5]]
-    item_3 = [item_data.iloc[index_3,1], item_data.iloc[index_3,3], item_data.iloc[index_3,4], item_data.iloc[index_3,5]]
+    item_1 = [item_data.iloc[index_1,1], item_data.iloc[index_1,3], item_data.iloc[index_1,4]]
+    item_2 = [item_data.iloc[index_2,1], item_data.iloc[index_2,3], item_data.iloc[index_2,4]]
+    item_3 = [item_data.iloc[index_3,1], item_data.iloc[index_3,3], item_data.iloc[index_3,4]]
 
     recommended_items = [item_1, item_2, item_3]
     return recommended_items
